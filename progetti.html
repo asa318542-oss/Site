@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="aer.css">
+    <title>Pane</title>
+    <link rel="icon" type="image/png" href="img/favicon-32x32.png">
+</head>
+<body>
+    <nav class="menu">
+        <a href="mio.html">Home</a>
+        
+        <a href="progetti.html" class="attivo">Progetti</a>
+        <a href="contatti.html">Contatti</a>
+    </nav>
+
+    <!-- 3 foto -->
+    <div class="galleria">
+        <img src="img/foto1.jpeg" alt="Foto 1">
+        <img src="img/foto2.jpeg" alt="Foto 2">
+        <img src="img/foto3.jpeg" alt="Foto 3">
+    </div>
+
+    <!-- Bottone "ho finito" -->
+    <div class="scheda" id="finito">
+        <button id="btnFinito">Ho finito di guardare le foto</button>
+    </div>
+
+    <!-- Valutazione (nascosta all'inizio) -->
+    <div class="scheda nascosto" id="valutazione">
+        <h1>Che voto dai?</h1>
+        <div class="stelle" id="stelle">
+            <span data-v="1">★</span>
+            <span data-v="2">★</span>
+            <span data-v="3">★</span>
+            <span data-v="4">★</span>
+            <span data-v="5">★</span>
+        </div>
+        <p id="messaggio"></p>
+    </div>
+
+    <!-- Jumpscare (nascosto) -->
+    <div id="jumpscare" class="nascosto">
+        <img src="img/jumpscare.jpg" alt="">
+    </div>
+    <audio id="urlo" src="audio/urlo.mp3" preload="auto"></audio>
+
+    <script>
+        const btnFinito = document.getElementById('btnFinito');
+        const valutazione = document.getElementById('valutazione');
+        const stelle = document.querySelectorAll('#stelle span');
+        const messaggio = document.getElementById('messaggio');
+        const jumpscare = document.getElementById('jumpscare');
+        const urlo = document.getElementById('urlo');
+
+        
+        btnFinito.onclick = () => {
+            document.getElementById('finito').classList.add('nascosto');
+            valutazione.classList.remove('nascosto');
+        };
+
+       
+        function colora(n) {
+            stelle.forEach(s => s.classList.toggle('on', s.dataset.v <= n));
+        }
+
+        stelle.forEach(s => {
+            s.onmouseover = () => colora(s.dataset.v);
+            s.onmouseout = () => colora(0);
+            s.onclick = () => {
+                if (s.dataset.v < 5) {
+                    
+                    jumpscare.classList.remove('nascosto');
+                    urlo.currentTime = 0;
+                    urlo.play();
+                    setTimeout(() => {
+                        jumpscare.classList.add('nascosto');
+                        if (urlo) urlo.pause();
+                        
+                    }, 1000);
+                } else {
+                    messaggio.textContent = "Grazie, 5 stelle! 🎉";
+                }
+            };
+        });
+    </script>
+</body>
+</html>
